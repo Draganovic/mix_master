@@ -1,9 +1,13 @@
 class SongsController < ApplicationController
-  before_action :set_artist, only: [:new, :create]
+  before_action :set_artist, only: [:new, :create, :index]
 
   def new
     # @artist = Artist.find(params[:artist_id])
     @song = @artist.songs.new
+  end
+
+  def index
+    @songs = @artist.songs.order_songs
   end
 
   def create

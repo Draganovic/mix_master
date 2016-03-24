@@ -1,12 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Song, type: :model do
-  context "validations" do
-    it { should belong_to(:artist)}
-    it { is_expected.to validate_presence_of(:title) }
-  end
+RSpec.feature "user views all songs" do
+  scenario "they see all songs associated with an artist" do
 
-  it "sorts alphabetically" do
     artist_name = "Bob Marley"
     artist_image_path = "http://cps-static.rovicorp.com/3/JPG_400/MI0003/146/MI0003146038.jpg"
     song_title1 = "Jamin"
@@ -17,7 +13,15 @@ RSpec.describe Song, type: :model do
     song2 = Song.create(title: song_title2, artist_id: artist.id)
     song3 = Song.create(title: song_title3, artist_id: artist.id)
 
-    ordered_songs = Song.order_songs
-    expect(ordered_songs).to eq [song2,song3,song1]
+    visit artist_path(artist)
+    click_on "View Songs"
+    expect(page).to have_content song_title1
+    expect(page).to have_content song_title2
+    expect(page).to have_content song_title3
+
+    click_on song_title1
+    expect(current_path).to eq song_path(song1)
+    expect(page).to have_content song_title1
+    expect(page).to have_link(artist_name, href: artist_path(artist))
   end
 end
