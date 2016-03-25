@@ -2,7 +2,6 @@
 
 <ul>
   <% @playlist.songs.each do |song| %>
-    <%= song.title %>
     <li><%= link_to song.title, song %></li>
   <% end %>
 </ul>
