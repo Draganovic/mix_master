@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.feature "user can see all existing playlists" do
-  scenario "they see multiple playlists on playlist index" do
+RSpec.feature "user edits a playlist" do
+  scenario "they update the name of a playlist" do
     artist_name1 = "Bob Marley"
     artist_name2 = "Elton John"
     artist_image_path1 = "http://cps-static.rovicorp.com/3/JPG_400/MI0003/146/MI0003146038.jpg"
@@ -21,20 +21,30 @@ RSpec.feature "user can see all existing playlists" do
     playlist1 = Playlist.create(name: playlist_name1, song_ids: [song1.id, song3.id])
     playlist2 = Playlist.create(name: playlist_name2, song_ids: [song2.id, song4.id])
 
-    visit playlists_path
+    visit playlist_path(playlist1)
 
-    expect(page).to have_content playlist_name1
-    expect(page).to have_content playlist_name2
-    click_link playlist1.name
+    click_on "Edit"
+    expect(current_path).to eq edit_playlist_path(playlist1)
+    fill_in "playlist_name", with: "new playlist name"
+    check("song-#{song4.id}")
+    uncheck("song-#{song3.id}")
+    click_on "Update Playlist"
 
+    expect(page).to have_content "new playlist name"
+    expect(page).to have_content song4.title
     expect(page).to have_content song1.title
-    expect(page).to have_content song3.title
-    expect(page).to_not have_content song2.title
+    expect(page).to_not have_content song3.title
   end
 end
 
 # As a user
-# Given that playlists exist in the database
-# When I visit the playlists index
-# Then I should see each playlist's name
-# And each name should link to that playlist's individual page
+# Given that a playlist and songs exist in the database
+# When I visit that playlist's show page
+# And I click on "Edit"
+# And I enter a new playlist name
+# And I select an additional song
+# And I uncheck an existing song
+# And I click on "Update Playlist"
+# Then I should see the playlist's updated name
+# And I should see the name of the newly added song`
+# And I should not see the name of the removed song
