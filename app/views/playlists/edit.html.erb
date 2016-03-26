@@ -1,11 +1,3 @@
-<%= form_for @playlist do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
+<h1>Edit Playlist</h1>
 
-  <% @songs.each do |song| %>
-   <%= check_box_tag(:song_ids, song.id, @playlist.songs.include?(song), :name => 'playlist[song_ids][]', id: "song-#{song.id}") %>
-    <%= song.title %>
- <% end %>
-
- <%= f.submit %>
-<% end %>
+<%= render partial: "form" %>

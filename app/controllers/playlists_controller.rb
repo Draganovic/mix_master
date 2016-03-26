@@ -7,6 +7,7 @@ class PlaylistsController<ApplicationController
 
   def new
     @playlist = Playlist.new
+    @songs = Song.all
   end
 
   def show
